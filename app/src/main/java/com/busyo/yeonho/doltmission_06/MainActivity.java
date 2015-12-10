@@ -10,39 +10,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
-    /**
-     * 페이지가 열려 있는지 알기 위한 플래그
-     */
-    boolean isPageOpen = false;
-
-    /**
-     * 애니메이션 객체
-     */
-    Animation translatednAnim;
-    Animation translateupAnim;
-
-    /**
-     * 슬라이딩으로 보여지는 페이지 레이아웃
-     */
-    LinearLayout slidingPage;
-
-    /**
-     * 열고닫는버튼
-     */
-    Button openbt;
 
 
 
-    TextView tv;
+
+    //TextView tv;
     ViewPager pager;
     WebPage page;
     EditText et;
@@ -58,64 +35,14 @@ public class MainActivity extends ActionBarActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(this);
         pager.setAdapter(adapter);
 
-        tv = (TextView)findViewById(R.id.text);
+        //tv = (TextView)findViewById(R.id.text);
         et = (EditText)findViewById(R.id.inputurl);
 
-        openbt = (Button) findViewById(R.id.open);
-        openbt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 애니메이션 적용
-                if (isPageOpen) {
-                    slidingPage.setVisibility(View.GONE);
-                    slidingPage.startAnimation(translateupAnim);
-                } else {
-                    slidingPage.setVisibility(View.VISIBLE);
-                    slidingPage.startAnimation(translatednAnim);
-                }
-            }
-        });
-        // 슬라이딩으로 보여질 레이아웃 객체 참조
-        slidingPage = (LinearLayout) findViewById(R.id.sliding);
 
-        // 애니메이션 객체 로딩
-        translatednAnim = AnimationUtils.loadAnimation(this, R.anim.translate_dn);
-        translateupAnim = AnimationUtils.loadAnimation(this, R.anim.translate_up);
-
-        // 애니메이션 객체에 리스너 설정
-        SlidingPageAnimationListener animListener = new SlidingPageAnimationListener();
-        translatednAnim.setAnimationListener(animListener);
-        translateupAnim.setAnimationListener(animListener);
 
 
     }
-    /**
-     * 애니메이션 리스너 정의
-     */
-    private class SlidingPageAnimationListener implements Animation.AnimationListener {
-        /**
-         * 애니메이션이 끝날 때 호출되는 메소드
-         */
-        public void onAnimationEnd(Animation animation) {
-            if (isPageOpen) {
-                openbt.setText("내리기");
-                isPageOpen = false;
 
-            } else {
-                openbt.setText("올리기");
-                isPageOpen = true;
-            }
-        }
-
-        public void onAnimationRepeat(Animation animation) {
-
-        }
-
-        public void onAnimationStart(Animation animation) {
-
-        }
-
-    }
 
     /**
      * 뷰페이저를 위한 어댑터 정의
@@ -170,35 +97,9 @@ public class MainActivity extends ActionBarActivity {
             container.removeView((View) view);
         }
 
-        public boolean isViewFromObject(View view, Object object) {
-            i=pager.getCurrentItem();
-            tv.setText(" " + (i+1)+" page URL: " + url[i]);
+        public boolean isViewFromObject(View view, final Object object) {
 
 
-
-            bt = (Button)findViewById(R.id.button);
-            bt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    if (!et.getText().toString().substring(0,7).toLowerCase().equals("http://"))
-                    {
-                        url[i]="http://" + et.getText().toString();
-
-                    }
-                    else
-                    {
-                        url[i]=et.getText().toString();
-
-                    }
-                    tv.setText(" " + (i + 1) + " page URL: " + url[i]);
-
-                    page.setUrl(url[i]);
-
-
-
-                }
-            });
 
             return view.equals(object);
         }
